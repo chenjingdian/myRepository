@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: operation
+  redis:
+    host: 58.87.122.18
+    port: 30040
 eureka:
   client:
     service-url:

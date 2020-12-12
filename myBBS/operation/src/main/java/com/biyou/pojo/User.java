@@ -1,12 +1,8 @@
 package com.biyou.pojo;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
-@Table(name = "t_user")
 public class User implements Serializable {
-    @Id
     private Integer id;
     private String username;
     private String password;

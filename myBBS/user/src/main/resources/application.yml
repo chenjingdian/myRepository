@@ -8,6 +8,9 @@ spring:
     url: jdbc:mysql://58.87.122.18/myBBS?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=UTC
     username: pig
     password: 123456
+  redis:
+    host: 58.87.122.18
+    port: 30040
 eureka:
   client:
     service-url:

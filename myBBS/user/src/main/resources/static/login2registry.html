@@ -7,17 +7,17 @@
 <body>
 <div id="app">
     <h2>登录</h2>
-    <form action="#" method="post">
-        请输入用户名 <input name="username" type="text"><br>
-        请输入密码<input name="password" type="password"><br>
-        <button type="submit">提交</button>
-    </form>
+    <div>
+        请输入用户名 <input name="username" type="text" v-model="username4login"><br>
+        请输入密码<input name="password" type="password" v-model="password4login"><br>
+        <button @click="login()">提交</button>
+    </div>
 
 
     <h2>注册</h2>
     <div>
-        请输入用户名 <input name="username" type="text" v-model="username"><br>
-        请输入密码<input name="password" type="password" v-model="password"><br>
+        请输入用户名 <input name="username" type="text" v-model="username" placeholder="长度限制5"><br>
+        请输入密码<input name="password" type="password" v-model="password" placeholder="长度限制10"><br>
 
         <button @click="registry()">提交</button>
     </div>
@@ -31,23 +31,33 @@
     let vue = new Vue({
         el: '#app',
         data: {
-            username: "",
-            password: ""
+            username4login:"",
+            password4login:"",
+            user: {
+                username: "",
+                password: ""
+            }
+
         },
         //钩子函数，VUE对象初始化完成后自动执行
         created() {
         },
         methods: {
             registry() {
-                let data = {username:this.username,password: this.password};
-                axios.post('/user/registry', data).then((response) => {
+                axios.post('/user/registry', this.user).then((response) => {
                     if (response.data.flag) {
-                        alert(response.data.message);
                         window.location.href = response.data.message;
                     }
                 }).catch(function (error) {
                     console.log(error);
                 });
+            },
+            login() {
+                axios.get('/user/login?username=' + this.username4login + "&password=" + this.password4login).then(response => {
+                    if (response.data.flag) {
+                        window.location.href = response.data.message;
+                    }
+                })
             }
         }
     })
