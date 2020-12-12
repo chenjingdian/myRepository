@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录或注册页面</title>
+</head>
+<body>
+<div id="app">
+    <h2>登录</h2>
+    <form action="#" method="post">
+        请输入用户名 <input name="username" type="text"><br>
+        请输入密码<input name="password" type="password"><br>
+        <button type="submit">提交</button>
+    </form>
+
+
+    <h2>注册</h2>
+    <form action="/user/registry" method="post">
+        请输入用户名 <input name="username" type="text" v-model="username"><br>
+        请输入密码<input name="password" type="password" v-model="password"><br>
+        <button type="submit">提交</button>
+    </form>
+
+
+</div>
+</body>
+<script src="js/axios.js"></script>
+<script src="js/util.js"></script>
+<script src="js/all.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            username:"",
+            password:""
+        },
+        //钩子函数，VUE对象初始化完成后自动执行
+        created() {
+        },
+        methods: {
+            registry(){
+                axios.post('/user/registry',this.data).then((response)=>{
+                if(response.date.flag){
+                    window.location =response.data.message
+                }
+                })
+            }
+        }
+    })
+</script>
+</html>
