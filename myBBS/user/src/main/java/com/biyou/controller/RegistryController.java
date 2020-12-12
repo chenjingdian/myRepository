@@ -19,9 +19,10 @@ public class RegistryController {
     private UserService userService;
 
     @PostMapping("/registry")
+    @ResponseBody
     public Result registry(@RequestBody User user) {
         userService.addUser(user);
-        return new Result(true,1,"OK");
+        return new Result(true,1,"http://localhost/index.html");
     }
 
 }

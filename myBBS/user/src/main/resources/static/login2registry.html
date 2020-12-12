@@ -15,13 +15,12 @@
 
 
     <h2>注册</h2>
-    <form action="/user/registry" method="post">
+    <div>
         请输入用户名 <input name="username" type="text" v-model="username"><br>
         请输入密码<input name="password" type="password" v-model="password"><br>
-        <button type="submit">提交</button>
-    </form>
 
-
+        <button @click="registry()">提交</button>
+    </div>
 </div>
 </body>
 <script src="js/axios.js"></script>
@@ -32,19 +31,23 @@
     let vue = new Vue({
         el: '#app',
         data: {
-            username:"",
-            password:""
+            username: "",
+            password: ""
         },
         //钩子函数，VUE对象初始化完成后自动执行
         created() {
         },
         methods: {
-            registry(){
-                axios.post('/user/registry',this.data).then((response)=>{
-                if(response.date.flag){
-                    window.location =response.data.message
-                }
-                })
+            registry() {
+                let data = {username:this.username,password: this.password};
+                axios.post('/user/registry', data).then((response) => {
+                    if (response.data.flag) {
+                        alert(response.data.message);
+                        window.location.href = response.data.message;
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
             }
         }
     })
