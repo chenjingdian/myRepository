@@ -1,26 +1,8 @@
 server:
-  port: 8000
+  port: 9001
 spring:
   application:
-    name: operation
-  redis:
-    host: 58.87.122.18
-    port: 30040
-  servlet:
-    multipart:
-      max-request-size: 10000MB
-      max-file-size: 10000MB
-  data:
-    mongodb:
-      host: 58.87.122.18
-      port: 27017
-      database: mydb
-logging:
-  level:
-    org.springframework.data.mongodb.core: debug
-idworker:
-  workerid: 31
-  datacenterid: 31
+    name: tast
 eureka:
   client:
     service-url:
@@ -35,6 +17,7 @@ feign:
       default:   #配置全局的feign的调用超时时间  如果 有指定的服务配置 默认的配置不会生效
         connectTimeout: 60000 # 指定的是 消费者 连接服务提供者的连接超时时间 是否能连接  单位是毫秒
         readTimeout: 20000  # 指定的是调用服务提供者的 服务 的超时时间（）  单位是毫秒
+
 #hystrix 配置
 hystrix:
   command:
@@ -48,3 +31,8 @@ hystrix:
           thread:
             # 熔断器超时时间，默认：1000/毫秒
             timeoutInMilliseconds: 20000
+#请求处理的超时时间
+ribbon:
+  ReadTimeout: 4000
+  #请求连接的超时时间
+  ConnectTimeout: 3000

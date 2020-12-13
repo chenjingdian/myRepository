@@ -35,7 +35,7 @@ public class LoginController {
             cookie.setPath("/");//如此可以 同一服务器共享cookie 即同一服务器根目录/下不同项目可共享
             cookie.setMaxAge(60*30);//表示寿命单位秒
             response.addCookie(cookie);
-            return new Result(true, 1, "http://localhost/index.html");
+            return new Result(true, 1, "http:8000//localhost/index.html");
         } else {
             return new Result(false, 0, "");
         }

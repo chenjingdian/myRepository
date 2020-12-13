@@ -42,4 +42,9 @@ public interface ArticleService {
      * @return
      */
     Article findById(long id);
+
+    /**
+     * 7.0 刷新权重分
+     */
+    void flushWeight();
 }

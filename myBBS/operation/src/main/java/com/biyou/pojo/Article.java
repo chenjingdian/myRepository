@@ -49,6 +49,17 @@ public class Article implements Serializable {
     //这篇长文的 转发量
     private int forwardNumber;
 
+    //这篇文章的权重分
+    private int weight;
+
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
     public Article() {
     }
