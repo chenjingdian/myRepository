@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>读操作</title>
+</head>
+<body>
+<div id="app">
+    <h1>{{name}}欢迎来到 myBBS !</h1>
+    <button @click="findBycreatTime()">最新发布</button>
+    <div v-for="article in articleList">{{article.title}}    作者 {{article.userName}}    权重分{{article.weight}}   发布时间{{article.createDate}}</div>
+
+</div>
+</body>
+<script src="js/axios.js"></script>
+<script src="js/util.js"></script>
+<script src="js/all.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            name: "",
+            articleList:[]
+        },
+        //钩子函数，VUE对象初始化完成后自动执行
+        created() {
+            axios.get('/user/welcome').then(res => {
+                if (res.data.flag) {
+                    this.name = res.data.message;
+                }
+            })
+        },
+        methods: {
+            findBycreatTime(){
+                axios.get('/read/findByCreateTime').then(res=>{
+                    if(res.data.flag){
+                        this.articleList=res.data.data;
+                    }
+                })
+            }
+        }
+    })
+</script>
+</html>

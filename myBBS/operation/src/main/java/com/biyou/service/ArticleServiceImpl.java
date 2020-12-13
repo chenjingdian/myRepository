@@ -11,10 +11,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,9 +21,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.lang.model.element.VariableElement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -62,11 +63,14 @@ public class ArticleServiceImpl implements ArticleService {
         //初始化给权重分
         String[] images = article.getImages();
         int i = 0;
-        for (String image : images) {
-            if (!StringUtils.isEmpty(image)) {
-                i++;
+        if (images != null && images.length > 0) {
+            for (String image : images) {
+                if (!StringUtils.isEmpty(image)) {
+                    i++;
+                }
             }
         }
+
         article.setWeight(50 + i);
 
         articleRepo.save(article);
@@ -86,11 +90,15 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public List<Article> findPageBySort(int currentPage, int totalPage) {
-        Sort sort = Sort.by("_id").descending();//desc 降序
+//        Sort sort = Sort.by("_id").descending();//desc 降序
+//        Sort sort = Sort.by("_id").ascending();//asc 升序
+        Sort sort = Sort.by("createDate").descending();
+
         PageRequest pageRequest = PageRequest.of(currentPage, totalPage, sort);
         Page<Article> all = articleRepo.findAll(pageRequest);
         return all.getContent();
     }
+
 
     /**
      * 根据id 删除 某条文档
@@ -171,13 +179,39 @@ public class ArticleServiceImpl implements ArticleService {
                 article.setWeight(0);
                 continue;
             } else {
-                long i = 30 * 24 * 60 * 60*50L / timeWeight;
+                long i = 30 * 24 * 60 * 60 * 50L / timeWeight;
                 int v = article.getViews();
                 int c = article.getCommentList().size() * 10;
 
-                article.setWeight((int) (i+v+c));
+                article.setWeight((int) (i + v + c));
             }
         }
+    }
+
+    /**
+     * 分页查询 根据创建时间排序
+     * 这个才是真正的 先排序  再 分页
+     *
+     * @param currentPage
+     * @param totalPage
+     * @return
+     */
+    @Override
+    public List<Article> findAllSort(int currentPage, int totalPage) throws ParseException {
+
+        Query query = new Query();
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "weight")));
+        query.skip(0);//跳过前多少条
+        query.limit(5);//每次给多少条
+
+        //准备条件
+//        Criteria criteria1 = Criteria.where("status").is("ONLINE");
+//        Criteria criteria2 = Criteria.where("update_ts").lte(System.currentTimeMillis());
+//        query.addCriteria(criteria1);
+//        query.addCriteria(criteria2);
+        List<Article> list = mongoTemplate.find(query, Article.class);
+
+        return list;
     }
 
 

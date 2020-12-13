@@ -3,6 +3,7 @@ package com.biyou.service;
 
 import com.biyou.pojo.Article;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface ArticleService {
@@ -47,4 +48,12 @@ public interface ArticleService {
      * 7.0 刷新权重分
      */
     void flushWeight();
+
+    /**
+     * 8.0 分页查询 根据创建时间排序
+     * @param currentPage
+     * @param totalPage
+     * @return
+     */
+    public List<Article> findAllSort(int currentPage, int totalPage) throws ParseException;
 }
