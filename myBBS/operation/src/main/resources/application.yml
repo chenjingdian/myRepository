@@ -6,6 +6,21 @@ spring:
   redis:
     host: 58.87.122.18
     port: 30040
+  servlet:
+    multipart:
+      max-request-size: 10000MB
+      max-file-size: 10000MB
+  data:
+    mongodb:
+      host: 58.87.122.18
+      port: 27017
+      database: mydb
+logging:
+  level:
+    org.springframework.data.mongodb.core: debug
+idworker:
+  workerid: 31
+  datacenterid: 31
 eureka:
   client:
     service-url:

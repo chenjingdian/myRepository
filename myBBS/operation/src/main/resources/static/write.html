@@ -2,9 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>写操作</title>
+    <title>写页面</title>
 </head>
 <body>
+<div id="app">
+    <form action="/upload/article" method="post" enctype="multipart/form-data">
+        <h1>图片</h1>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <input name="file" type="file">file<br>
+        <h1>类型</h1>
+        <input name="extent" type="radio" value="长文">长文<br>
+        <input name="extent" type="radio" value="短文">短文<br>
+        <input name="title" type="text">标题<br>
+        <input name="text" type="text">文章内容<br>
+        <h1>选择标签</h1>
+        <input name="tag" type="radio" value="旅行">旅行<br>
+        <input name="tag" type="radio" value="亲子">亲子<br>
+        <input name="userName" type="hidden" :value=username><br>
+        <h1>选择城市</h1>
+        <input name="city" type="radio" value="北京">北京<br>
+        <input name="city" type="radio" value="上海">上海<br>
+        <input name="city" type="radio" value="武汉">武汉<br>
+        <input name="city" type="radio" value="南京">南京<br>
+        <input name="city" type="radio" value="广州">广州<br>
 
+
+        <button>上传</button>
+    </form>
+</div>
 </body>
+<script src="js/axios.js"></script>
+<script src="js/util.js"></script>
+<script src="js/all.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            username: ""
+        },
+        //钩子函数，VUE对象初始化完成后自动执行
+        created() {
+            axios.get('/user/welcome').then(res=>{
+                if(res.data.flag){
+                    this.username=res.data.message;
+                }
+            })
+        },
+        methods: {}
+    })
+</script>
 </html>
