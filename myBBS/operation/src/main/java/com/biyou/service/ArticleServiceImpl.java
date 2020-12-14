@@ -179,9 +179,13 @@ public class ArticleServiceImpl implements ArticleService {
                 article.setWeight(0);
                 continue;
             } else {
-                long i = 30 * 24 * 60 * 60 * 50L / timeWeight;
+                long i = -1;
                 int v = article.getViews();
-                int c = article.getCommentList().size() * 10;
+                int c = 0;
+                if (article.getCommentList() != null) {
+                    c = article.getCommentList().size() * 10;
+                }
+
 
                 article.setWeight((int) (i + v + c));
             }

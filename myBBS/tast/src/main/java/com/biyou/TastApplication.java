@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.biyou.feign")
 public class TastApplication {
     public static void main(String[] args) {
         SpringApplication.run(TastApplication.class);
