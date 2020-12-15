@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +36,7 @@ public class UploadController {
      * 多个文件上传
      */
     @PostMapping("/article")
-    public Article moreimage(HttpServletRequest request, Article article) {
+    public void moreimage(HttpServletRequest request, HttpServletResponse response,Article article) {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         //准备好接受图片的 数组
 
@@ -80,7 +84,13 @@ public class UploadController {
 
         articleService.addDoc(article);
 
-        return article;
+        try {
+            response.sendRedirect("/index.html");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        return article;
     }
 
 }

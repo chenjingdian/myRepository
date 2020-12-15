@@ -169,6 +169,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void flushWeight() {
         //1.0找出权重分 非0的 文章
         List<Article> list = articleRepo.findByWeightAfter(0);
+
         for (Article article : list) {
             //1.0计算时间
             Date createDate = article.getCreateDate();
@@ -179,16 +180,20 @@ public class ArticleServiceImpl implements ArticleService {
                 article.setWeight(0);
                 continue;
             } else {
-                long i = -1;
+                long i = -10;
                 int v = article.getViews();
                 int c = 0;
                 if (article.getCommentList() != null) {
                     c = article.getCommentList().size() * 10;
                 }
-
-
                 article.setWeight((int) (i + v + c));
             }
+            //重写mongo中的数据
+            Query query = new Query();
+            query.addCriteria(Criteria.where("_id").is(article.getId()));
+            Update update = new Update();
+            update.set("weight",article.getWeight());
+            mongoTemplate.updateFirst(query, update, "article");
         }
     }
 
@@ -204,7 +209,7 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> findAllSort(int currentPage, int totalPage) throws ParseException {
 
         Query query = new Query();
-        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "weight")));
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createDate")));
         query.skip(0);//跳过前多少条
         query.limit(5);//每次给多少条
 

@@ -10,4 +10,6 @@ public interface ArticleRepository extends MongoRepository<Article, Long> {
     public List<Article> findByIdIsBefore(long time);
 
     List<Article>findByWeightAfter(int score);
+
+
 }

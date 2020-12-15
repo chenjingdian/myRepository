@@ -1,6 +1,8 @@
 package com.biyou;
 
+import com.biyou.service.ArticleService;
 import com.biyou.utils_entry.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -18,6 +20,9 @@ public class OperationApplication {
         SpringApplication.run(OperationApplication.class, args);
     }
 
+    @Autowired
+    private ArticleService articleService;
+
     @Bean
     public IdWorker getIDworker() {
         return new IdWorker();
@@ -26,7 +31,9 @@ public class OperationApplication {
 
     @Scheduled(cron = "0/10 * * * * ?")
     public void tast(){
-        Date date = new Date();
-        System.out.println("定时任务执行了    ......    "+date.toString());
+        System.out.println("定时任务执行了    ......    ");
+
+        articleService.flushWeight();
+
     }
 }

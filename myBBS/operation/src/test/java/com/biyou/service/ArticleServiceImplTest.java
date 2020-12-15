@@ -1,6 +1,7 @@
 package com.biyou.service;
 
 import com.biyou.pojo.Article;
+import com.biyou.utils_entry.FastDFSClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,23 @@ public class ArticleServiceImplTest {
         Article article = new Article();
         article.setWeight(100);
         articleService.addDoc(article);
+    }
+
+
+    /**
+     * 删除fastDFS文件
+     */
+    @Test
+    public void delF() throws Exception {
+        FastDFSClient.deleteFile("groupname","M00/00/00/rBUACF_U3oCAX-7UAAA-KYeT7T8545.png");
+    }
+
+
+    /**
+     * 刷新权重
+     */
+    @Test
+    public void fush(){
+        articleService.flushWeight();
     }
 }
