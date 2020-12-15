@@ -7,7 +7,7 @@
 <body>
 <div id="app">
     <h1>{{name}}欢迎来到 myBBS !</h1>
-    <button @click="findBycreatTime()">最新发布</button>
+    <button @click="findBycreatTime()">最新发布</button>     <button></button>
     <div v-for="article in articleList">{{article.title}}    作者 {{article.userName}}    权重分{{article.weight}}   发布时间{{article.createDate}}</div>
 
 </div>

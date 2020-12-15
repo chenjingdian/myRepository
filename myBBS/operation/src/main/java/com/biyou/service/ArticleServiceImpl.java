@@ -180,13 +180,13 @@ public class ArticleServiceImpl implements ArticleService {
                 article.setWeight(0);
                 continue;
             } else {
-                long i = -10;
+                long i = -1;
                 int v = article.getViews();
                 int c = 0;
                 if (article.getCommentList() != null) {
                     c = article.getCommentList().size() * 10;
                 }
-                article.setWeight((int) (i + v + c));
+                article.setWeight((int) (i + v + c)+article.getWeight());
             }
             //重写mongo中的数据
             Query query = new Query();

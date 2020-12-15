@@ -56,4 +56,11 @@ public interface ArticleService {
      * @return
      */
     public List<Article> findAllSort(int currentPage, int totalPage) throws ParseException;
+
+    /**
+     * 9.0 条件查询
+     * 条件1 作者列表
+     * 权重分 排序
+     */
+
 }
