@@ -72,5 +72,5 @@ public interface ArticleService {
      * @param ids
      * @return
      */
-    List<Article> findByMyLove(List<Integer> ids);
+    List<Article> findByMyLove(List<String> names);
 }

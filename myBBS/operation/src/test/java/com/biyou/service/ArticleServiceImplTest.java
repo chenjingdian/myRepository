@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -58,5 +59,28 @@ public class ArticleServiceImplTest {
     @Test
     public void fush(){
         articleService.flushWeight();
+    }
+
+
+    /**
+     * 关注的作者
+     *
+     */
+    @Test
+    public void read(){
+        List<String> names=new ArrayList<>();
+        names.add("鲁迅");
+        names.add("巴金");
+        names.add("老舍");
+        names.add("曹雪芹");
+        names.add("罗贯中");
+        names.add("施耐庵");
+        names.add("吴承恩");
+
+        List<Article> list = articleService.findByMyLove(names);
+
+        for (Article article : list) {
+            System.out.println(article.getId());
+        }
     }
 }

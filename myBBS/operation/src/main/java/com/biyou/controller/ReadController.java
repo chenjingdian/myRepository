@@ -44,13 +44,16 @@ public class ReadController {
 
     @GetMapping("/findByMyLove")
     public Result findByMyLove(String username) throws ParseException {
-        System.out.println(username+"关注的作者我就不查数据库表了,我直接 这个给一个list集合...代表id集合");
-        List<Integer> ids=new ArrayList<>();
-        ids.add(11);
-        ids.add(12);
-        ids.add(13);
-        ids.add(14);
-        List<Article> list = articleService.findByMyLove(ids);
+        System.out.println(username+"关注的作者我就不查数据库表了,我直接 这个给一个list集合...代表names集合");
+        List<String> names=new ArrayList<>();
+        names.add("鲁迅");
+        names.add("巴金");
+        names.add("老舍");
+        names.add("曹雪芹");
+        names.add("罗贯中");
+        names.add("施耐庵");
+        names.add("吴承恩");
+        List<Article> list = articleService.findByMyLove(names);
         return new Result(true,20,"OK",list);
     }
 

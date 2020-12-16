@@ -71,7 +71,7 @@ public class ArticleServiceImpl implements ArticleService {
             }
         }
 
-        article.setWeight(50 + i);
+        article.setWeight(5000 + i);
 
         articleRepo.save(article);
 
@@ -249,16 +249,16 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * 根据关注的 作者名录 以及权重分,查询 文章列表
      *
-     * @param ids
+     * @param names
      * @return
      */
     @Override
-    public List<Article> findByMyLove(List<Integer> ids) {
+    public List<Article> findByMyLove(List<String> names) {
         Query query = new Query();
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "weight")));
 
-        //这个条件是 作者id  in 在 这个 collection 里面 这个条件
-        Criteria criteria1 = Criteria.where("userId").in(ids);
+        //这个条件是 作者id  in 在 这个 collection 里面 这个条件,其实用 作者id查 是比较 高效的,但是前台页面没存 id  存的是作者名,
+        Criteria criteria1 = Criteria.where("userName").in(names);
 
         query.addCriteria(criteria1);
 
