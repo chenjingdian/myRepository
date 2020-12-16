@@ -24,13 +24,14 @@ public class ReadController {
 
     /**
      * 根据发布时间排序
+     *
      * @return
      * @throws ParseException
      */
     @GetMapping("/findByCreateTime")
     public Result findByCreateTime() throws ParseException {
         List<Article> allSort = articleService.findAllSort(1, 20);
-        return new Result(true,20,"OK",allSort);
+        return new Result(true, 20, "OK", allSort);
     }
 
     /**
@@ -39,13 +40,13 @@ public class ReadController {
     @GetMapping("/findByWeight")
     public Result findByWeight() throws ParseException {
         List<Article> list = articleService.findByWeight(1, 20);
-        return new Result(true,20,"OK",list);
+        return new Result(true, 20, "OK", list);
     }
 
     @GetMapping("/findByMyLove")
     public Result findByMyLove(String username) throws ParseException {
-        System.out.println(username+"关注的作者我就不查数据库表了,我直接 这个给一个list集合...代表names集合");
-        List<String> names=new ArrayList<>();
+        System.out.println(username + "关注的作者我就不查数据库表了,我直接 这个给一个list集合...代表names集合");
+        List<String> names = new ArrayList<>();
         names.add("鲁迅");
         names.add("巴金");
         names.add("老舍");
@@ -54,7 +55,16 @@ public class ReadController {
         names.add("施耐庵");
         names.add("吴承恩");
         List<Article> list = articleService.findByMyLove(names);
-        return new Result(true,20,"OK",list);
+        return new Result(true, 20, "OK", list);
+    }
+
+
+    @GetMapping("/getone")
+    public Result getone(String id) {
+        long i = Long.parseLong(id);
+        Article article = articleService.findById(i);
+
+        return new Result(true,20,"ok",article);
     }
 
 }

@@ -29,7 +29,7 @@ public class OperationApplication {
     }
 
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/1 * * * * ?")
     public void tast(){
         System.out.println("定时任务执行了    ......    ");
 

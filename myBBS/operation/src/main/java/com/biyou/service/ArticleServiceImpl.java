@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -158,8 +159,20 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public Article findById(long id) {
-        Optional<Article> byId = articleRepo.findById(id);
-        return byId.get();
+//        Optional<Article> byId = articleRepo.findById(id);
+//        Article byId1 = mongoTemplate.findById(id, Article.class);
+        Query query = new Query();
+
+        Criteria cri=new Criteria();
+
+        Criteria id1 = cri.is("_id");
+
+        query.addCriteria(id1);
+
+        List<Article> list = mongoTemplate.find(query, Article.class);
+
+        return list.get(0);
+//        return byId1;
     }
 
     /**

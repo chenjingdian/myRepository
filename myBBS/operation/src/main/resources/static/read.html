@@ -7,8 +7,15 @@
 <body>
 <div id="app">
     <h1>{{name}}欢迎来到 myBBS !</h1>
-    <button @click="findBycreatTime()">最新发布</button>     <button @click="findByWeight()">热门文章</button>  <button @click="findByMyLove()">我关注的作者排序</button>
-    <div v-for="article in articleList">{{article.title}}    作者 {{article.userName}}    权重分{{article.weight}}   发布时间{{article.createDate}}</div>
+    <button @click="findBycreatTime()">最新发布</button>
+    <button @click="findByWeight()">热门文章</button>
+    <button @click="findByMyLove()">我关注的作者排序</button>
+
+    <div v-for="article in articleList"><a :href="'/readOne.html?id='+article.id">{{article.title}} 作者
+        {{article.userName}} 权重分{{article.weight}}
+        发布时间{{article.createDate}}</a>
+    </div>
+
 
 </div>
 </body>
@@ -21,7 +28,7 @@
         el: '#app',
         data: {
             name: "",
-            articleList:[]
+            articleList: []
         },
         //钩子函数，VUE对象初始化完成后自动执行
         created() {
@@ -32,24 +39,24 @@
             })
         },
         methods: {
-            findBycreatTime(){
-                axios.get('/read/findByCreateTime').then(res=>{
-                    if(res.data.flag){
-                        this.articleList=res.data.data;
+            findBycreatTime() {
+                axios.get('/read/findByCreateTime').then(res => {
+                    if (res.data.flag) {
+                        this.articleList = res.data.data;
                     }
                 })
             },
-            findByWeight(){
-                axios.get('/read/findByWeight').then(res=>{
-                    if(res.data.flag){
-                        this.articleList=res.data.data;
+            findByWeight() {
+                axios.get('/read/findByWeight').then(res => {
+                    if (res.data.flag) {
+                        this.articleList = res.data.data;
                     }
                 })
             },
-            findByMyLove(){
-                axios.get('/read/findByMyLove?username='+this.name).then(res=>{
-                    if(res.data.flag){
-                        this.articleList=res.data.data;
+            findByMyLove() {
+                axios.get('/read/findByMyLove?username=' + this.name).then(res => {
+                    if (res.data.flag) {
+                        this.articleList = res.data.data;
                     }
                 })
             }
