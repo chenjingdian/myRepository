@@ -58,9 +58,19 @@ public interface ArticleService {
     public List<Article> findAllSort(int currentPage, int totalPage) throws ParseException;
 
     /**
-     * 9.0 条件查询
-     * 条件1 作者列表
-     * 权重分 排序
+     * 9.0
+     * 根据权重分 排序 并分页
+     * @param currentPage
+     * @param totalPage
+     * @return
      */
+    List<Article> findByWeight(int currentPage, int totalPage);
 
+
+    /**
+     * 根据关注的 作者名录 以及权重分,查询 文章列表
+     * @param ids
+     * @return
+     */
+    List<Article> findByMyLove(List<Integer> ids);
 }

@@ -186,13 +186,13 @@ public class ArticleServiceImpl implements ArticleService {
                 if (article.getCommentList() != null) {
                     c = article.getCommentList().size() * 10;
                 }
-                article.setWeight((int) (i + v + c)+article.getWeight());
+                article.setWeight((int) (i + v + c) + article.getWeight());
             }
             //重写mongo中的数据
             Query query = new Query();
             query.addCriteria(Criteria.where("_id").is(article.getId()));
             Update update = new Update();
-            update.set("weight",article.getWeight());
+            update.set("weight", article.getWeight());
             mongoTemplate.updateFirst(query, update, "article");
         }
     }
@@ -220,6 +220,52 @@ public class ArticleServiceImpl implements ArticleService {
 //        query.addCriteria(criteria2);
         List<Article> list = mongoTemplate.find(query, Article.class);
 
+        return list;
+    }
+
+
+    /**
+     * 根据权重分排序并分页
+     *
+     * @param currentPage
+     * @param totalPage
+     * @return
+     */
+    @Override
+    public List<Article> findByWeight(int currentPage, int totalPage) {
+        Query query = new Query();
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "weight")));
+        //多条件查询 要求 权重分>=0
+        Criteria criteria1 = Criteria.where("weight").gt(0);
+        query.addCriteria(criteria1);
+
+        query.skip(0);//跳过前多少条
+        query.limit(5);//每次给多少条
+
+        List<Article> list = mongoTemplate.find(query, Article.class);
+        return list;
+    }
+
+    /**
+     * 根据关注的 作者名录 以及权重分,查询 文章列表
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<Article> findByMyLove(List<Integer> ids) {
+        Query query = new Query();
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "weight")));
+
+        //这个条件是 作者id  in 在 这个 collection 里面 这个条件
+        Criteria criteria1 = Criteria.where("userId").in(ids);
+
+        query.addCriteria(criteria1);
+
+        query.skip(0);//跳过前多少条
+        query.limit(50);//每次给多少条
+
+        List<Article> list = mongoTemplate.find(query, Article.class);
         return list;
     }
 
