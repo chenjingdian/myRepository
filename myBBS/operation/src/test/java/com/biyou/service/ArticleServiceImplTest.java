@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,7 +26,7 @@ public class ArticleServiceImplTest {
     public void findPageBySort() {
         List<Article> pageBySort = articleService.findPageBySort(1, 20);
         for (Article article : pageBySort) {
-            System.out.println(article.getTitle() + "   " + article.getCreateDate());
+            System.out.println(article.getTitle() + "   " + article.getCreateDate() + " id  " + article.getId());
         }
     }
 
@@ -43,6 +44,7 @@ public class ArticleServiceImplTest {
         article.setWeight(1000000);
         article.setId(1);
         articleService.addDoc(article);
+
     }
 
 
@@ -78,11 +80,14 @@ public class ArticleServiceImplTest {
         names.add("施耐庵");
         names.add("吴承恩");
 
-        List<Article> list = articleService.findByMyLove(names);
+        while (true) {
+            List<Article> list = articleService.findByMyLove(names);
 
-        for (Article article : list) {
-            System.out.println(article.getId());
+            for (Article article : list) {
+                System.out.println(article.getId() + "   " + article.getUserName() + "    " + article.getTitle() + "   " + article.getCreateDate());
+            }
         }
+
     }
 
 
@@ -91,17 +96,19 @@ public class ArticleServiceImplTest {
      * 1339121538866036700L
      */
     @Test
-    public void readOne()  {
+    public void readOne() {
+
         while (true) {
-            int c= (int) (Math.random()*1000);
-            try {
-                Thread.sleep(c);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Article byId = articleService.findById(1336581495065669632L);
-            System.out.println(byId.getUserName());
+            Article byId = articleService.findById(1339941363066560512L);
+            System.out.println(byId.getUserName() + "    " + byId.getWeight());
         }
 
+
+    }
+
+    @Test
+    public void delete() {
+
+        articleService.deleteById(1339399273395933184L);
     }
 }

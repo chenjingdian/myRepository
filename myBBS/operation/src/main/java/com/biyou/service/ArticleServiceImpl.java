@@ -5,6 +5,7 @@ import com.biyou.pojo.Article;
 import com.biyou.utils_entry.IdWorker;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.QueryBuilder;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -160,19 +158,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article findById(long id) {
 //        Optional<Article> byId = articleRepo.findById(id);
-//        Article byId1 = mongoTemplate.findById(id, Article.class);
-        Query query = new Query();
+        Article byId1 = mongoTemplate.findById(id, Article.class);
 
-        Criteria cri=new Criteria();
-
-        Criteria id1 = cri.is("_id");
-
-        query.addCriteria(id1);
-
-        List<Article> list = mongoTemplate.find(query, Article.class);
-
-        return list.get(0);
-//        return byId1;
+        return byId1;
     }
 
     /**
@@ -267,7 +255,15 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public List<Article> findByMyLove(List<String> names) {
-        Query query = new Query();
+
+//        QueryBuilder queryBuilder = new QueryBuilder();
+//
+//        BasicDBObject fieldsObject=new BasicDBObject();//这个是设置 返回字段
+//        fieldsObject.put("title", 1);                  //1代表要返回,0代表不要返回
+//        fieldsObject.put("userName", 1);                //_id 默认是1要返回,除非设置为0
+
+        //设置查询条件
+        Query query = new BasicQuery("{}","{title:1,userName:1}");//返回字段是标题与 作者名 查询条件是空,后面再加
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "weight")));
 
         //这个条件是 作者id  in 在 这个 collection 里面 这个条件,其实用 作者id查 是比较 高效的,但是前台页面没存 id  存的是作者名,

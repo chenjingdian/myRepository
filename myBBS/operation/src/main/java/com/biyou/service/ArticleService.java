@@ -69,8 +69,10 @@ public interface ArticleService {
 
     /**
      * 根据关注的 作者名录 以及权重分,查询 文章列表
-     * @param ids
+     * @param
      * @return
      */
     List<Article> findByMyLove(List<String> names);
+
+
 }
