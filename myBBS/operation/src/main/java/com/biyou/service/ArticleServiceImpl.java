@@ -1,6 +1,7 @@
 package com.biyou.service;
 
 import com.biyou.dao.ArticleRepository;
+import com.biyou.feign.UserFeign;
 import com.biyou.pojo.Article;
 import com.biyou.utils_entry.IdWorker;
 import com.mongodb.BasicDBObject;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -41,6 +43,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private UserFeign userFeign;
 
 
     /**
@@ -74,6 +82,12 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleRepo.save(article);
 
+        String userName = article.getUserName();
+        //前面的坑,根据用户名 我从数据库 查 userid
+        //这里不查了,userid 都算在11号头上
+
+        //给用户加 积分
+        userFeign.increase(11L,1);
     }
 
     /**

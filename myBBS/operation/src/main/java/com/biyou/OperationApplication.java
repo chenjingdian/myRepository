@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -19,6 +20,7 @@ import java.util.Date;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableScheduling
+@EnableFeignClients
 public class OperationApplication {
     public static void main(String[] args) {
         SpringApplication.run(OperationApplication.class, args);

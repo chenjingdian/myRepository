@@ -16,6 +16,6 @@ public class UserScoreServiceImplTest {
 
     @Test
     public void increase() {
-        userScoreService.increase(11,5);
+        userScoreService.increase(11L,5);
     }
 }

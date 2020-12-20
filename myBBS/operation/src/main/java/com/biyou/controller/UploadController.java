@@ -2,10 +2,13 @@ package com.biyou.controller;
 
 
 import com.biyou.pojo.Article;
+import com.biyou.pojo.User;
 import com.biyou.service.ArticleService;
 import com.biyou.utils_entry.FastDFSClient;
 import com.biyou.utils_entry.FastDFSFile;
+import com.biyou.utils_entry.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,7 +34,8 @@ public class UploadController {
     @Autowired
     private ArticleService articleService;
 
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 表单上传
      * 多个文件上传
@@ -80,6 +85,18 @@ public class UploadController {
                 }
             }
             article.setImages(arr);
+        }
+
+        //为articel 新增 注明 作者信息
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if ("sessionId".equalsIgnoreCase(cookie.getName())) {
+                User usr = (User) redisTemplate.opsForValue().get(cookie.getValue());
+                if (usr == null) {
+                    continue;
+                }
+                article.setUserName(usr.getUsername());
+            }
         }
 
         articleService.addDoc(article);

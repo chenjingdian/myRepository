@@ -11,7 +11,7 @@ public class UserScoreServiceImpl implements UserScoreService {
     private UserScoreMapper userScoreMapper;
 
     @Override
-    public void increase(Integer uid, Integer inc) {
+    public void increase(Long uid, Integer inc) {
         userScoreMapper.increase(uid, inc);
     }
 }
