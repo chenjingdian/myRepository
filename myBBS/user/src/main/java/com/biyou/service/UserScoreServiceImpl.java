@@ -12,6 +12,9 @@ public class UserScoreServiceImpl implements UserScoreService {
 
     @Override
     public void increase(Long uid, Integer inc) {
+
+        //模拟提供方出现异常
+        int e = 1 / 0;
         userScoreMapper.increase(uid, inc);
     }
 }

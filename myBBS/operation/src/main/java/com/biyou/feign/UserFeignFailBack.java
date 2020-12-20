@@ -16,6 +16,9 @@ public class UserFeignFailBack implements UserFeign {
      */
     @Override
     public void increase(Long uid, Integer inc) {
-        System.out.println("消费方 用户积分增长 降级");
+        for (int i = 0; i < 1000; i++) {
+            System.out.println("消费方 用户积分增长 降级");
+        }
+
     }
 }
