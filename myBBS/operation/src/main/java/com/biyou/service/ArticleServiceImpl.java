@@ -25,10 +25,11 @@ import javax.lang.model.element.VariableElement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -183,33 +184,60 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void flushWeight() {
         //1.0找出权重分 非0的 文章
+        //这里用 LinkedList 效率更高,可以做对列
         List<Article> list = articleRepo.findByWeightAfter(0);
 
+
+
+        //这里开启线程池
+
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(2,5,2, TimeUnit.SECONDS,new ArrayBlockingQueue<>(10), Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
         for (Article article : list) {
-            //1.0计算时间
-            Date createDate = article.getCreateDate();
-            long createDateTime = createDate.getTime();
-            long now = System.currentTimeMillis();
-            long timeWeight = now - createDateTime;
-            if (timeWeight >= 30 * 24 * 60 * 60 * 1000L) {
-                article.setWeight(0);
-                continue;
-            } else {
-                long i = -1;
-                int v = article.getViews();
-                int c = 0;
-                if (article.getCommentList() != null) {
-                    c = article.getCommentList().size() * 10;
-                }
-                article.setWeight((int) (i + v + c) + article.getWeight());
-            }
-            //重写mongo中的数据
-            Query query = new Query();
-            query.addCriteria(Criteria.where("_id").is(article.getId()));
-            Update update = new Update();
-            update.set("weight", article.getWeight());
-            mongoTemplate.updateFirst(query, update, "article");
+//            pool.submit(new MyRunnable());
+            pool.submit(() -> {
+                article.setWeight(article.getWeight()-1);//这一步是我重写权重分
+                //重写到 mongoDB 中去
+                //重写mongo中的数据
+                Query query = new Query();
+                query.addCriteria(Criteria.where("_id").is(article.getId()));
+                Update update = new Update();
+                update.set("weight", article.getWeight());
+                mongoTemplate.updateFirst(query, update, "article");
+            });
         }
+
+        // 朝生夕死  放在内存溢出 所以这里关闭线程池
+        pool.shutdown();
+
+
+
+
+
+//        for (Article article : list) {
+//            //1.0计算时间
+//            Date createDate = article.getCreateDate();
+//            long createDateTime = createDate.getTime();
+//            long now = System.currentTimeMillis();
+//            long timeWeight = now - createDateTime;
+//            if (timeWeight >= 30 * 24 * 60 * 60 * 1000L) {
+//                article.setWeight(0);
+//                continue;
+//            } else {
+//                long i = -1;
+//                int v = article.getViews();
+//                int c = 0;
+//                if (article.getCommentList() != null) {
+//                    c = article.getCommentList().size() * 10;
+//                }
+//                article.setWeight((int) (i + v + c) + article.getWeight());
+//            }
+//            //重写mongo中的数据
+//            Query query = new Query();
+//            query.addCriteria(Criteria.where("_id").is(article.getId()));
+//            Update update = new Update();
+//            update.set("weight", article.getWeight());
+//            mongoTemplate.updateFirst(query, update, "article");
+//        }
     }
 
     /**
